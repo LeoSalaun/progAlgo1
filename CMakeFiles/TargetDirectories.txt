@@ -1,0 +1,3 @@
+/mnt/d/temp/Scolaire/IMAC-ESIPE/Algo_prog/projet/CMakeFiles/rebuild_cache.dir
+/mnt/d/temp/Scolaire/IMAC-ESIPE/Algo_prog/projet/CMakeFiles/edit_cache.dir
+/mnt/d/temp/Scolaire/IMAC-ESIPE/Algo_prog/projet/CMakeFiles/Cpp_SDL_Program.dir
