@@ -1,7 +1,7 @@
 #include "application_ui.h"
 #include "SDL2_gfxPrimitives.h"
 
-const int RADIUS = 10;
+const int RADIUS = 20;
 
 struct ellipse {
     int coX;
@@ -70,13 +70,71 @@ void draw(SDL_Renderer* renderer, ellipse ell)
    
 }
 
-bool handleEvent()
+bool inEllipse(ellipse ell, SDL_Event e) {
+    return sqrt(float( (e.button.x-ell.coX)*(e.button.x-ell.coX) + (e.button.y-ell.coY)*(e.button.y-ell.coY))) <= RADIUS;
+}
+
+void ajoutListe(liste* l, ellipse ell) {
+    liste * aux = l;
+    if (l == nullptr) {
+        l = new liste;
+        l->init(ell);
+    }
+    else {
+        while (aux->suivant != nullptr) {
+            aux = aux->suivant;
+        }
+        aux->suivant = new liste;
+        aux->suivant->init(ell);
+    }
+}
+
+void handleMouseEvent(liste * l, SDL_Event e) {
+    if (e.button.button == SDL_BUTTON_LEFT) {
+        if (l != nullptr && inEllipse(l->ell,e)) {
+            delete l;
+            l = nullptr;
+        }
+        else if (l != nullptr) {
+            liste* auxFollow = l;
+            liste* auxRemove = l->suivant;
+            bool trouve = false;
+            while (auxRemove != nullptr && !(trouve)) {
+                trouve = inEllipse(auxRemove->ell,e);
+                if (!(trouve)) {
+                    auxFollow = auxRemove;
+                    auxRemove = auxRemove->suivant;
+                }
+            }
+            if (trouve) {
+                auxFollow->suivant = auxRemove->suivant;
+                delete auxRemove;
+            }
+            else {
+                ellipse ell;
+                ell.init(e.button.x,e.button.y,rand()%10,rand()%10,RADIUS,rand()%255,rand()%255,rand()%255);
+                ajoutListe(l,ell);
+            }
+        }
+        else {
+            ellipse ell;
+            ell.init(e.button.x,e.button.y,rand()%10,rand()%10,RADIUS,rand()%255,rand()%255,rand()%255);
+            ajoutListe(l,ell);
+        }
+    }
+}
+
+bool handleEvent(liste * l)
 {
     /* Remplissez cette fonction pour gérer les inputs utilisateurs */
     SDL_Event e; 
     while (SDL_PollEvent(&e)){ 
-        if (e.type == SDL_QUIT) 
+        if (e.type == SDL_QUIT) {
             return false;
+        }
+        else if (e.type == SDL_MOUSEBUTTONDOWN) {
+            handleMouseEvent(l,e);
+        }
     }
     return true;
 }
@@ -95,44 +153,29 @@ void handleEventsEllipse(ellipse *ell) {
     }
 }
 
-void ajoutListe(liste* l, ellipse ell) {
-    liste * aux = l;
-    if (l == nullptr) {
-        l = new liste;
-        l->init(ell);
-    }
-    else {
-        while (aux->suivant != nullptr) {
-            aux = aux->suivant;
-        }
-        aux->suivant = new liste;
-        aux->suivant->init(ell);
-    }
-}
-
 void initListe(liste* l, int argc, char** argv) {
-    ellipse * ell;
+    ellipse ell;
 
     if (argc == 1) {
-        for (int i=0 ; i<10 ; i++) {
-            ell = new ellipse;
-            ell->init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%RADIUS+1,rand()%RADIUS+1,RADIUS,rand()%255,rand()%255,rand()%255);
+        
+        for (int i=0 ; i<9 ; i++) {
+            ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%RADIUS+1,rand()%RADIUS+1,RADIUS,rand()%255,rand()%255,rand()%255);
 
-            if (ell->coX-RADIUS < 0) {
-                ell->coX = RADIUS;
+            if (ell.coX-RADIUS < 0) {
+                ell.coX = RADIUS;
             }
-            else if (ell->coX+RADIUS > SCREEN_WIDTH) {
-                ell->coX = SCREEN_WIDTH - RADIUS;
-            }
-
-            if (ell->coY-RADIUS < 0) {
-                ell->coY = RADIUS;
-            }
-            else if (ell->coY+RADIUS > SCREEN_HEIGHT) {
-                ell->coY = SCREEN_HEIGHT - RADIUS;
+            else if (ell.coX+RADIUS > SCREEN_WIDTH) {
+                ell.coX = SCREEN_WIDTH - RADIUS;
             }
 
-            //ajoutListe(l,*ell);
+            if (ell.coY-RADIUS < 0) {
+                ell.coY = RADIUS;
+            }
+            else if (ell.coY+RADIUS > SCREEN_HEIGHT) {
+                ell.coY = SCREEN_HEIGHT - RADIUS;
+            }
+
+            ajoutListe(l,ell);
         }
     }
     else {
@@ -166,9 +209,3 @@ void handleEventsList(liste* l) {
         aux = aux->suivant;
     }
 }
-
-/*void handleMouseEvent(SDL_MouseButtonEvent e) {
-    if (e.which == SDL_BUTTON_LEFT) {
-
-    }
-}*/

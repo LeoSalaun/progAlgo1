@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-const int RADIUS = 10;
+const int RADIUS = 20;
 
 int main(int argc, char** argv) {
     SDL_Window* gWindow;
@@ -26,11 +26,12 @@ int main(int argc, char** argv) {
 
     // CREATION DES ACTEURS
 
-    /*ellipse base;
-    base.init(0,0,0,0,0,0,0,0);
-
-    listeEllipse->init(base);*/
     liste *listeEllipse = new liste;
+
+    ellipse ell;
+    ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%10+1,rand()%10+1,RADIUS,rand()%255,rand()%255,rand()%255);
+    listeEllipse->init(ell);
+
     initListe(listeEllipse, argc, argv);
 
     /*ellipse ell1, ell2, ell3;
@@ -42,42 +43,19 @@ int main(int argc, char** argv) {
     listeEllipse->init(ell1);
     ajoutListe(listeEllipse,ell2);
     ajoutListe(listeEllipse,ell3);*/
-    
-    /*listeEllipse->ell = ell1;
-    listeEllipse->suivant->ell = ell2;
-    listeEllipse->suivant->suivant->ell = ell3;*/
 
     /*  GAME LOOP  */
     while(true)
     {
         // INPUTS
-        //SDL_Event e;
-
-        is_running = handleEvent();
+        
+        is_running = handleEvent(listeEllipse);
         if (!is_running)
             break;
-        
-        /*switch (e.type)
-        {
-        case SDL_MouseButtonEvent:
-            // ______________
-            break;
-        
-        default:
-            break;
-        }*/
 
         // GESTION ACTEURS
 
-        /*moveEllipse(&ell1);
-        moveEllipse(&ell2);
-        moveEllipse(&ell3);*/
-
         moveList(listeEllipse);
-
-        /*handleEventsEllipse(&ell1);
-        handleEventsEllipse(&ell2);
-        handleEventsEllipse(&ell3);*/
         
         handleEventsList(listeEllipse);
         
@@ -88,10 +66,6 @@ int main(int argc, char** argv) {
         // DESSIN
 
         drawListe(renderer,listeEllipse);
-
-        /*draw(renderer,ell1);
-        draw(renderer,ell2);
-        draw(renderer,ell3);*/
 
         // VALIDATION FRAME
         SDL_RenderPresent(renderer);

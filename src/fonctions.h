@@ -60,13 +60,17 @@ struct liste {
 
 void draw(SDL_Renderer* renderer, ellipse ell);
 
-bool handleEvent();
+bool inEllipse(ellipse ell, SDL_MouseButtonEvent e);
+
+void ajoutListe(liste* l, ellipse ell);
+
+void handleMouseEvent(liste * l, SDL_MouseButtonEvent e);
+
+bool handleEvent(liste * l);
 
 void moveEllipse(ellipse *ell);
 
 void handleEventsEllipse(ellipse *ell);
-
-void ajoutListe(liste* l, ellipse ell);
 
 void initListe(liste* l, int argc, char** argv);
 
@@ -75,5 +79,3 @@ void drawListe(SDL_Renderer * renderer,liste* l);
 void moveList(liste* l);
 
 void handleEventsList(liste* l);
-
-//void handleMouseEvent(SDL_MouseButtonEvent e);
