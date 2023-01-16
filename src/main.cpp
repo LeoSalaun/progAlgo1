@@ -1,85 +1,11 @@
 #include "application_ui.h"
 #include "SDL2_gfxPrimitives.h"
+#include "fonctions.h"
 
-struct ellipse {
-    int coX;
-    int coY;
-    int speedX;
-    int speedY;
-    int radius;
-    unsigned int red;
-    unsigned int green;
-    unsigned int blue;
+#include <iostream>
+using namespace std;
 
-    void init(int coX,int coY,int speedX,int speedY,int radius,unsigned int red,unsigned int green,unsigned int blue) {
-        this->coX = coX;
-        this->coY = coY;
-        this->speedX = speedX;
-        this->speedY = speedY;
-        this->radius = radius;
-        this->red = red;
-        this->green = green;
-        this->blue = blue;
-    }
-} ;
-
-struct point {
-    int x;
-    int y;
-
-    void init(int x,int y) {
-        this->x = x;
-        this->y = y;
-    }
-} ;
-
-struct wall {
-    point point1;
-    point point2;
-
-    void init(int x1,int y1,int x2,int y2) {
-        point1.init(x1,y1);
-        point2.init(x2,y2);
-    }
-
-    void init(point point1, point point2) {
-        this->point1 = point1;
-        this->point2 = point2;
-    }
-} ;
-
-struct liste {
-    ellipse ell;
-    liste * suivant;
-
-    void init(ellipse first) {
-        this->ell = first;
-    }
-} ;
-
-void draw(SDL_Renderer* renderer)
-{
-    /* Remplissez cette fonction pour faire l'affichage du jeu */
-    
-    /* 
-    filledEllipseRGBA(
-        renderer, ... ?
-    ); 
-    */
-   
-}
-
-bool handleEvent()
-{
-    /* Remplissez cette fonction pour gérer les inputs utilisateurs */
-    SDL_Event e; 
-    while (SDL_PollEvent(&e)){ 
-        if (e.type == SDL_QUIT) 
-            return false; 
-    }
-    return true;
-}
-
+const int RADIUS = 10;
 
 int main(int argc, char** argv) {
     SDL_Window* gWindow;
@@ -97,24 +23,75 @@ int main(int argc, char** argv) {
 
     renderer = SDL_CreateRenderer(gWindow, -1, 0); // SDL_RENDERER_PRESENTVSYNC
 
+
+    // CREATION DES ACTEURS
+
+    /*ellipse base;
+    base.init(0,0,0,0,0,0,0,0);
+
+    listeEllipse->init(base);*/
+    liste *listeEllipse = new liste;
+    initListe(listeEllipse, argc, argv);
+
+    /*ellipse ell1, ell2, ell3;
+
+    ell1.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%10+1,rand()%10+1,10,rand()%255,rand()%255,rand()%255);
+    ell2.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%10+1,rand()%10+1,10,rand()%255,rand()%255,rand()%255);
+    ell3.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%10+1,rand()%10+1,10,rand()%255,rand()%255,rand()%255);
+    
+    listeEllipse->init(ell1);
+    ajoutListe(listeEllipse,ell2);
+    ajoutListe(listeEllipse,ell3);*/
+    
+    /*listeEllipse->ell = ell1;
+    listeEllipse->suivant->ell = ell2;
+    listeEllipse->suivant->suivant->ell = ell3;*/
+
     /*  GAME LOOP  */
     while(true)
     {
         // INPUTS
+        //SDL_Event e;
+
         is_running = handleEvent();
         if (!is_running)
             break;
+        
+        /*switch (e.type)
+        {
+        case SDL_MouseButtonEvent:
+            // ______________
+            break;
+        
+        default:
+            break;
+        }*/
 
         // GESTION ACTEURS
 
-        // ...
+        /*moveEllipse(&ell1);
+        moveEllipse(&ell2);
+        moveEllipse(&ell3);*/
+
+        moveList(listeEllipse);
+
+        /*handleEventsEllipse(&ell1);
+        handleEventsEllipse(&ell2);
+        handleEventsEllipse(&ell3);*/
+        
+        handleEventsList(listeEllipse);
         
         // EFFACAGE FRAME
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 100, 255);
         SDL_RenderClear(renderer);
         
         // DESSIN
-        draw(renderer);
+
+        drawListe(renderer,listeEllipse);
+
+        /*draw(renderer,ell1);
+        draw(renderer,ell2);
+        draw(renderer,ell3);*/
 
         // VALIDATION FRAME
         SDL_RenderPresent(renderer);
