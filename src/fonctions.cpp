@@ -1,5 +1,10 @@
 #include "application_ui.h"
 #include "SDL2_gfxPrimitives.h"
+#include <typeinfo>
+#include <string.h>
+
+#include <iostream>
+using namespace std;
 
 const int RADIUS = 20;
 
@@ -179,9 +184,35 @@ void initListe(liste* l, int argc, char** argv) {
         }
     }
     else {
-        for (int i=1 ; i<argc ; i++) {
-            // à compléter ...
-        }
+        /*for (int i=1 ; i<argc ; i++) {
+            if (strcpy(typeid(argv[i]).name(),"int") == 0) {*/
+                if (atoi(argv[1]) <= 0) {
+                    delete l;
+                    l = nullptr;
+                }
+                else {
+                    for (int i=0 ; i<atoi(argv[1])-1 ; i++) {
+                        ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%RADIUS+1,rand()%RADIUS+1,RADIUS,rand()%255,rand()%255,rand()%255);
+
+                        if (ell.coX-RADIUS < 0) {
+                            ell.coX = RADIUS;
+                        }
+                        else if (ell.coX+RADIUS > SCREEN_WIDTH) {
+                            ell.coX = SCREEN_WIDTH - RADIUS;
+                        }
+
+                        if (ell.coY-RADIUS < 0) {
+                            ell.coY = RADIUS;
+                        }
+                        else if (ell.coY+RADIUS > SCREEN_HEIGHT) {
+                            ell.coY = SCREEN_HEIGHT - RADIUS;
+                        }
+
+                        ajoutListe(l,ell);
+                    }
+                }/*
+            }
+        }*/
     }
     
 }

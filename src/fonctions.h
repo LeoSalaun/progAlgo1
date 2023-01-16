@@ -1,5 +1,10 @@
 #include "application_ui.h"
 #include "SDL2_gfxPrimitives.h"
+#include <typeinfo>
+#include <string.h>
+
+#include <iostream>
+using namespace std;
 
 struct ellipse {
     int coX;
