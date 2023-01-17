@@ -8,6 +8,10 @@ using namespace std;
 
 const int RADIUS = 20;
 
+const int NBCOLORS = 8;
+const char COLORS[NBCOLORS][8] = {"red","green","blue","yellow","magenta","cyan","black","white"};
+const int COLORSCODE[NBCOLORS][3] = {{255,0,0},{0,255,0},{0,0,255},{255,255,0},{255,0,255},{0,255,255},{0,0,0},{255,255,255}};
+
 struct ellipse {
     int coX;
     int coY;
@@ -70,7 +74,7 @@ void draw(SDL_Renderer* renderer, ellipse ell)
     /* Remplissez cette fonction pour faire l'affichage du jeu */
     
     
-    filledEllipseRGBA(renderer,ell.coX,ell.coY,ell.radius,ell.radius,ell.red,ell.blue,ell.green,255); 
+    filledEllipseRGBA(renderer,ell.coX,ell.coY,ell.radius,ell.radius,ell.red,ell.green,ell.blue,255); 
 
    
 }
@@ -158,8 +162,33 @@ void handleEventsEllipse(ellipse *ell) {
     }
 }
 
+bool isInt(char* array) {
+    bool res = true;
+    int i=0;
+    while ((res) && i<static_cast<int>(strlen(array))) {
+        res = (array[i] >= 0 && array[i] <= 9);
+    }
+    return res;
+}
+
+int color(char* array) {
+    bool res = false;
+    int i=0;
+    while (!(res) && i<NBCOLORS) {
+        res = (strcmp(array,COLORS[i]) == 0);
+        if (!(res)) {
+            i++;
+        }
+    }
+    if (!(res)) {
+        i = -1;
+    }
+    return i;
+}
+
 void initListe(liste* l, int argc, char** argv) {
     ellipse ell;
+    int indexColor;
 
     if (argc == 1) {
         
@@ -185,7 +214,10 @@ void initListe(liste* l, int argc, char** argv) {
     }
     else {
         /*for (int i=1 ; i<argc ; i++) {
-            if (strcpy(typeid(argv[i]).name(),"int") == 0) {*/
+            if (isInt(argv[i])) {*/
+                /*ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%RADIUS+1,rand()%RADIUS+1,RADIUS,255,255,255);
+                ajoutListe(l,ell);*/
+            if (argc == 2) {
                 if (atoi(argv[1]) <= 0) {
                     delete l;
                     l = nullptr;
@@ -210,9 +242,80 @@ void initListe(liste* l, int argc, char** argv) {
 
                         ajoutListe(l,ell);
                     }
-                }/*
+                }
             }
-        }*/
+        /*}
+            else {
+                indexColor = color(argv[i]);
+                if (indexColor != -1) {
+                    if (i+1<argc && isInt(argv[i+1])) {
+                        for (int j=0 ; j<atoi(argv[i+1]) ; j++) {
+                            ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%RADIUS+1,rand()%RADIUS+1,RADIUS,COLORSCODE[indexColor][0],COLORSCODE[indexColor][1],COLORSCODE[indexColor][2]);
+
+                            if (ell.coX-RADIUS < 0) {
+                                ell.coX = RADIUS;
+                            }
+                            else if (ell.coX+RADIUS > SCREEN_WIDTH) {
+                                ell.coX = SCREEN_WIDTH - RADIUS;
+                            }
+
+                            if (ell.coY-RADIUS < 0) {
+                                ell.coY = RADIUS;
+                            }
+                            else if (ell.coY+RADIUS > SCREEN_HEIGHT) {
+                                ell.coY = SCREEN_HEIGHT - RADIUS;
+                            }
+
+                            ajoutListe(l,ell);
+                        }
+                        i++;
+                    }
+                    else {
+                        ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%RADIUS+1,rand()%RADIUS+1,RADIUS,COLORSCODE[indexColor][0],COLORSCODE[indexColor][1],COLORSCODE[indexColor][2]);
+
+                        if (ell.coX-RADIUS < 0) {
+                            ell.coX = RADIUS;
+                        }
+                        else if (ell.coX+RADIUS > SCREEN_WIDTH) {
+                            ell.coX = SCREEN_WIDTH - RADIUS;
+                        }
+
+                        if (ell.coY-RADIUS < 0) {
+                            ell.coY = RADIUS;
+                        }
+                        else if (ell.coY+RADIUS > SCREEN_HEIGHT) {
+                            ell.coY = SCREEN_HEIGHT - RADIUS;
+                        }
+
+                        ajoutListe(l,ell);
+                    }
+                }
+            }
+        }
+    }*/
+        else {
+            for (int i=1 ; i<argc ; i++) {
+                indexColor = color(argv[i]);
+
+                ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%RADIUS+1,rand()%RADIUS+1,RADIUS,COLORSCODE[indexColor][0],COLORSCODE[indexColor][1],COLORSCODE[indexColor][2]);
+
+                if (ell.coX-RADIUS < 0) {
+                    ell.coX = RADIUS;
+                }
+                else if (ell.coX+RADIUS > SCREEN_WIDTH) {
+                    ell.coX = SCREEN_WIDTH - RADIUS;
+                }
+
+                if (ell.coY-RADIUS < 0) {
+                    ell.coY = RADIUS;
+                }
+                else if (ell.coY+RADIUS > SCREEN_HEIGHT) {
+                    ell.coY = SCREEN_HEIGHT - RADIUS;
+                }
+
+                ajoutListe(l,ell);
+            }
+        }
     }
     
 }

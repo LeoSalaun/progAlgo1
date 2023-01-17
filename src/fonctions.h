@@ -77,6 +77,8 @@ void moveEllipse(ellipse *ell);
 
 void handleEventsEllipse(ellipse *ell);
 
+bool isInt(char* array);
+
 void initListe(liste* l, int argc, char** argv);
 
 void drawListe(SDL_Renderer * renderer,liste* l);
