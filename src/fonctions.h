@@ -63,26 +63,42 @@ struct liste {
     }
 };
 
-void draw(SDL_Renderer* renderer, ellipse ell);
+void drawEllipse(SDL_Renderer* renderer, ellipse ell);
+
+void drawWall(SDL_Renderer* renderer, wall mur);
+
+double distance(int x1, int y1, int x2, int y2);
 
 bool inEllipse(ellipse ell, SDL_MouseButtonEvent e);
 
-void ajoutListe(liste* l, ellipse ell);
+void ajoutListe(liste ** l, ellipse ell);
 
-void handleMouseEvent(liste * l, SDL_MouseButtonEvent e);
+void removeEllipse(liste ** l, SDL_Event e);
 
-bool handleEvent(liste * l);
+void handleMouseEvent(liste ** l, SDL_MouseButtonEvent e);
+
+bool handleEvent(liste ** l);
+
+void correctCoordinatesWindow(ellipse *ell, wall murs[]);
+
+void correctCoordinates(ellipse *ell, wall murs[]);
 
 void moveEllipse(ellipse *ell);
 
-void handleEventsEllipse(ellipse *ell);
+bool contactWallX(ellipse ell, wall murs[]);
+
+bool contactWallY(ellipse ell, wall murs[]);
+
+bool contactWallAngle(ellipse ell, wall murs[]);
+
+void handleEventsEllipse(ellipse *ell, wall murs[]);
 
 bool isInt(char* array);
 
-void initListe(liste* l, int argc, char** argv);
+void initListe(liste ** l, wall murs[], int argc, char** argv);
 
 void drawListe(SDL_Renderer * renderer,liste* l);
 
 void moveList(liste* l);
 
-void handleEventsList(liste* l);
+void handleEventsList(liste* l, wall murs[]);

@@ -26,13 +26,22 @@ int main(int argc, char** argv) {
 
     // CREATION DES ACTEURS
 
-    liste *listeEllipse = new liste;
+    wall murs[4];
+    murs[0].init(50,100,275,125);
+    murs[1].init(600,75,635,260);
+    murs[2].init(400,360,650,400);
+    murs[3].init(155,220,165,410);
 
+    liste * listeEllipse = nullptr;
+
+    /*
+    liste * listeEllipse = new liste;
     ellipse ell;
-    ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%10+1,rand()%10+1,RADIUS,rand()%255,rand()%255,rand()%255);
-    listeEllipse->init(ell);
+    ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%10+1,rand()%10+1,RADIUS,rand()%155+100,rand()%155+100,rand()%155+100);
+    correctCoordinates(&ell,murs);
+    listeEllipse->init(ell);*/
 
-    initListe(listeEllipse, argc, argv);
+    initListe(&listeEllipse, murs, argc, argv);
 
     /*ellipse ell1, ell2, ell3;
 
@@ -49,7 +58,7 @@ int main(int argc, char** argv) {
     {
         // INPUTS
         
-        is_running = handleEvent(listeEllipse);
+        is_running = handleEvent(&listeEllipse);
         if (!is_running)
             break;
 
@@ -57,7 +66,7 @@ int main(int argc, char** argv) {
 
         moveList(listeEllipse);
         
-        handleEventsList(listeEllipse);
+        handleEventsList(listeEllipse,murs);
         
         // EFFACAGE FRAME
         SDL_SetRenderDrawColor(renderer, 0, 0, 100, 255);
@@ -66,6 +75,10 @@ int main(int argc, char** argv) {
         // DESSIN
 
         drawListe(renderer,listeEllipse);
+        
+        for (int i=0 ; i<4 ; i++) {
+            drawWall(renderer,murs[i]);
+        }
 
         // VALIDATION FRAME
         SDL_RenderPresent(renderer);
