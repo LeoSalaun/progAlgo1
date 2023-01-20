@@ -2,6 +2,7 @@
 #include "SDL2_gfxPrimitives.h"
 #include <typeinfo>
 #include <string.h>
+#include <cstdlib>
 
 #include <iostream>
 using namespace std;
@@ -367,13 +368,30 @@ void initListe(liste** l, wall murs[], int argc, char** argv) {
             l = nullptr;*/
             for (int i=1 ; i<argc ; i++) {
                 indexColor = color(argv[i]);
+                /*int r,g,b;
+                r = (strtol(argv[i],NULL,16) & 0xFF) >> 16;
+                g = (strtol(argv[i],NULL,16) & 0xFF) >> 8;
+                b = (strtol(argv[i],NULL,16) & 0xFF) >> 0;*/
+                int intColor = strtol(argv[i],NULL,16);
+
                 int r,g,b;
-                r = (atoi(argv[i]) & 0xFF) >> 16;
-                g = (atoi(argv[i]) & 0xFF) >> 8;
-                b = (atoi(argv[i]) & 0xFF) >> 0;
+
+                /*r[0] = argv[i][2];
+                r[1] = argv[i][3];
+
+                g[0] = argv[i][4];
+                g[1] = argv[i][5];
+                
+                b[0] = argv[i][6];
+                b[1] = argv[i][7];*/
+
+                r = (intColor & 0xFF0000) >> 16;
+                g = (intColor & 0x00FF00) >> 8;
+                b = (intColor & 0x0000FF) >> 0;
 
                 //ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%RADIUS+1,rand()%RADIUS+1,RADIUS,COLORSCODE[indexColor][0],COLORSCODE[indexColor][1],COLORSCODE[indexColor][2]);
                 ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%20-10,rand()%20-10,RADIUS,r,g,b);
+                //ell.init(rand()%SCREEN_WIDTH,rand()%SCREEN_HEIGHT,rand()%20-10,rand()%20-10,RADIUS,strtol(r,NULL,16),strtol(g,NULL,16),strtol(b,NULL,16));
 
                 correctCoordinates(&ell, murs);
 

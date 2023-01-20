@@ -2,6 +2,7 @@
 #include "SDL2_gfxPrimitives.h"
 #include <typeinfo>
 #include <string.h>
+#include <cstdlib>
 
 #include <iostream>
 using namespace std;
